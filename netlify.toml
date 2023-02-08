@@ -1,4 +1,5 @@
 [build]
     functions="functions"
-[dist]
-    publish="dist"
+
+[functions."update-database"]
+    schedule = "5 0 * * *"
