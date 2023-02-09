@@ -1,27 +1,22 @@
-import axios from "axios";
-import { parse } from "node-html-parser";
-
-import { extractFromTescoDocument } from "../crawlers/tesco-extractor";
 import { uploadDataset } from "../client";
+import { PRODUCTS } from "../products";
+import { getProductData } from "../helpers";
 
 export const handler = async () => {
-  const URLS = [
-    "https://nakup.itesco.cz/groceries/cs-CZ/products/2001012691222",
-    "https://nakup.itesco.cz/groceries/cs-CZ/products/2001014250175",
-  ];
   const results = [];
-  for (const url of URLS) {
-    try {
-      const { data } = await axios.get(url);
-      const document = parse(data);
-
-      results.push({
-        ...extractFromTescoDocument(document),
-        "#url": url,
-        date: new Date().toISOString(),
-      });
-    } catch (error) {
-      console.log(error.message, url);
+  for (const marketName of Object.keys(PRODUCTS)) {
+    for (const productId of PRODUCTS[marketName]) {
+      try {
+        const { pricePerUnit} = getProductData(marketName, productId);
+        results.push({
+          marketName,
+          productId,
+          date: new Date().toISOString(),
+          pricePerUnit,
+        });
+      } catch (error) {
+        console.log(error.message, marketName, productId);
+      }
     }
   }
 
