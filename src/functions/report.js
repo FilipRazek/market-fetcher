@@ -1,9 +1,11 @@
+import * as dotenv from "dotenv";
 import express from "express";
 import serverless from "serverless-http";
-import { fetchReport } from "./helpers";
+import { fetchDataset, getReportName } from "../helpers";
+
+dotenv.config();
 
 const app = express();
-
 const router = express.Router();
 
 router.get("/", async (req, res) => {
@@ -11,10 +13,13 @@ router.get("/", async (req, res) => {
   if (!format || typeof format !== "string") {
     return res.status(400).send(JSON.stringify({ error: "Invalid format" }));
   }
-  const report = await fetchReport(format);
-  res.download(report, `report.${format}`, (err) => {
-    console.log(err);
-  });
+  try {
+    const report = await fetchDataset(format);
+    res.attachment(getReportName(format));
+    res.status(200).send(report);
+  } catch (error) {
+    res.status(400).send({ error: error.message });
+  }
 });
 
 app.use("/.netlify/functions/report", router);

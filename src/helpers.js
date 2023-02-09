@@ -1,12 +1,17 @@
-import { ApifyClient } from "apify-client";
+import { getDataset } from "./client";
+import { parse } from "json2csv";
 
-// Fetch report from Apify dataset
-export const fetchReport = async (format) => {
-  const apifyClient = new ApifyClient({
-    token: process.env.APIFY_TOKEN,
-  });
-
-  const datasetClient = apifyClient.dataset();
-  const xlsx = await datasetClient.downloadItems("xlsx");
-  return xlsx;
+export const fetchDataset = async (format) => {
+  const data = await getDataset();
+  switch (format) {
+    case "csv":
+      return parse(data);
+    case "json":
+      return data;
+    default:
+      throw new Error(`Invalid format: ${format}`);
+  }
 };
+
+export const getReportName = (format) =>
+  `report-${new Date().toISOString()}.${format}`;
