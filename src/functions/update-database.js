@@ -1,11 +1,34 @@
-import * as dotenv from "dotenv";
-dotenv.config();
+import axios from "axios";
+import { parse } from "node-html-parser";
 
-export const handler = async (event, context) => {
-  console.log(process.env.APIFY_TOKEN);
+import { extractFromTescoDocument } from "../crawlers/tesco-extractor";
+import { uploadDataset } from "../client";
+
+export const handler = async () => {
+  const URLS = [
+    "https://nakup.itesco.cz/groceries/cs-CZ/products/2001012691222",
+    "https://nakup.itesco.cz/groceries/cs-CZ/products/2001014250175",
+  ];
+  const results = [];
+  for (const url of URLS) {
+    try {
+      const { data } = await axios.get(url);
+      const document = parse(data);
+
+      results.push({
+        ...extractFromTescoDocument(document),
+        "#url": url,
+        date: new Date().toISOString(),
+      });
+    } catch (error) {
+      console.log(error.message, url);
+    }
+  }
+
+  await uploadDataset(results);
 
   return {
     statusCode: 200,
-    body: JSON.stringify("Hello from Lambda!"),
+    body: "Success!",
   };
 };

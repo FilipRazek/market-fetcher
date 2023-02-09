@@ -1,4 +1,7 @@
+import * as dotenv from "dotenv";
 import axios from "axios";
+
+dotenv.config();
 
 const APIFY_TOKEN = process.env.APIFY_TOKEN;
 const DATASET_ID = process.env.DATASET_ID;

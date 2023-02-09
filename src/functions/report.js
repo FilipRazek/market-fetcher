@@ -1,9 +1,6 @@
-import * as dotenv from "dotenv";
 import express from "express";
 import serverless from "serverless-http";
 import { fetchDataset, getReportName } from "../helpers";
-
-dotenv.config();
 
 const app = express();
 const router = express.Router();

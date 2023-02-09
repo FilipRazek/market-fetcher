@@ -1,4 +1,4 @@
-import { getDataset } from "./client";
+import { getDataset, uploadDataset } from "./client";
 import { parse } from "json2csv";
 
 export const fetchDataset = async (format) => {
