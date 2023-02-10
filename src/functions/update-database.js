@@ -7,7 +7,7 @@ export const handler = async () => {
   for (const marketName of Object.keys(PRODUCTS)) {
     for (const productId of PRODUCTS[marketName]) {
       try {
-        const { pricePerUnit} = getProductData(marketName, productId);
+        const { pricePerUnit } = await getProductData(marketName, productId);
         results.push({
           marketName,
           productId,

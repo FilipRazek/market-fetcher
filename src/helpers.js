@@ -49,7 +49,6 @@ const fetchReferencesData = async () => {
       );
 
       const quantity = price / pricePerUnit;
-      console.log(price, pricePerUnit, quantity);
       try {
         results.push({
           marketName,
