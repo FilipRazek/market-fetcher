@@ -43,7 +43,7 @@ const fetchReferencesData = async () => {
   const results = [];
   for (const marketName of Object.keys(PRODUCTS)) {
     for (const productId of PRODUCTS[marketName]) {
-      const { price, pricePerUnit, image, title, unit } = await getProductData(
+      const { price, pricePerUnit, image, title, unit, category } = await getProductData(
         marketName,
         productId
       );
@@ -54,6 +54,7 @@ const fetchReferencesData = async () => {
           marketName,
           productId,
           title,
+          category,
           image,
           quantity,
           unit,
