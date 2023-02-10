@@ -3,7 +3,6 @@ import { parse as parseHtml } from "node-html-parser";
 import { parse as parseJson } from "json2csv";
 import { extractFromDocument } from "./crawlers/extractors";
 import { getDataset } from "./client";
-import { PRODUCTS } from "./products";
 
 export const fetchDataset = async (datasetId, format) => {
   const data = await getDataset(datasetId);
