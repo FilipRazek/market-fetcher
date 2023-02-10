@@ -10,7 +10,6 @@ export const extractFromDocument = (document, extractorName) => {
   const unit = unitFn(document);
   const image = imageFn(document);
   const category = categoryFn(document);
-  console.log(category);
   return { title, pricePerUnit, price, unit, image, category };
 };
 

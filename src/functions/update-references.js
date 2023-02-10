@@ -31,6 +31,7 @@ export const handler = async () => {
           unit,
         });
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.log(error.message, marketName, productId);
       }
     }

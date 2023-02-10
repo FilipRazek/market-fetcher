@@ -15,6 +15,7 @@ export const handler = async () => {
           pricePerUnit,
         });
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.log(error.message, marketName, productId);
       }
     }
