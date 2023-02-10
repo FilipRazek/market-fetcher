@@ -1,4 +1,4 @@
-import { PRODUCTS_DATASET_ID, uploadDataset } from "../client";
+import { REFERENCES_DATASET_ID, uploadDataset } from "../client";
 import { PRODUCTS } from "../products";
 import { getProductData } from "../helpers";
 
@@ -7,12 +7,18 @@ export const handler = async () => {
   for (const marketName of Object.keys(PRODUCTS)) {
     for (const productId of PRODUCTS[marketName]) {
       try {
-        const { pricePerUnit } = await getProductData(marketName, productId);
+        const { price, pricePerUnit, image, title, unit, category } =
+          await getProductData(marketName, productId);
+        const quantity = price / pricePerUnit;
+
         results.push({
           marketName,
           productId,
-          date: new Date().toISOString(),
-          pricePerUnit,
+          title,
+          category,
+          image,
+          quantity,
+          unit,
         });
       } catch (error) {
         console.log(error.message, marketName, productId);
@@ -20,7 +26,7 @@ export const handler = async () => {
     }
   }
 
-  await uploadDataset(PRODUCTS_DATASET_ID, results);
+  await uploadDataset(REFERENCES_DATASET_ID, results);
 
   return {
     statusCode: 200,

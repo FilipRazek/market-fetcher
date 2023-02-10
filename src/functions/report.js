@@ -1,8 +1,8 @@
 import express from "express";
 import serverless from "serverless-http";
+import { PRODUCTS_DATASET_ID, REFERENCES_DATASET_ID } from "../client";
 import {
   fetchDataset,
-  getReferencesData,
   getReferencesName,
   getReportName,
 } from "../helpers";
@@ -16,7 +16,7 @@ router.get("/products", async (req, res) => {
     return res.status(400).send(JSON.stringify({ error: "Invalid format" }));
   }
   try {
-    const report = await fetchDataset(format);
+    const report = await fetchDataset(PRODUCTS_DATASET_ID, format);
     res.attachment(getReportName(format));
     res.status(200).send(report);
   } catch (error) {
@@ -30,7 +30,7 @@ router.get("/references", async (req, res) => {
     return res.status(400).send(JSON.stringify({ error: "Invalid format" }));
   }
   try {
-    const report = await getReferencesData(format);
+    const report = await fetchDataset(REFERENCES_DATASET_ID, format);
     res.attachment(getReferencesName(format));
     res.status(200).send(report);
   } catch (error) {

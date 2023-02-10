@@ -5,8 +5,8 @@ import { extractFromDocument } from "./crawlers/extractors";
 import { getDataset } from "./client";
 import { PRODUCTS } from "./products";
 
-export const fetchDataset = async (format) => {
-  const data = await getDataset();
+export const fetchDataset = async (datasetId, format) => {
+  const data = await getDataset(datasetId);
   switch (format) {
     case "csv":
       return parseJson(data);
@@ -37,44 +37,4 @@ export const getProductData = async (marketName, productId) => {
   const document = parseHtml(data);
 
   return extractFromDocument(document, marketName);
-};
-
-const fetchReferencesData = async () => {
-  const results = [];
-  for (const marketName of Object.keys(PRODUCTS)) {
-    for (const productId of PRODUCTS[marketName]) {
-      const { price, pricePerUnit, image, title, unit, category } = await getProductData(
-        marketName,
-        productId
-      );
-
-      const quantity = price / pricePerUnit;
-      try {
-        results.push({
-          marketName,
-          productId,
-          title,
-          category,
-          image,
-          quantity,
-          unit,
-        });
-      } catch (error) {
-        console.log(error.message, marketName, productId);
-      }
-    }
-  }
-  return results;
-};
-
-export const getReferencesData = async (format) => {
-  const data = await fetchReferencesData();
-  switch (format) {
-    case "csv":
-      return parseJson(data);
-    case "json":
-      return data;
-    default:
-      throw new Error(`Invalid format: ${format}`);
-  }
 };
