@@ -3,3 +3,7 @@
 
 [functions."update-database"]
     schedule = "0 4 * * *"
+
+[[redirects]]
+  from = "/*"
+  to = "/.netlify/functions/:splat"
