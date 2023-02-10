@@ -1,8 +1,9 @@
 import axios from "axios";
 import { parse as parseHtml } from "node-html-parser";
 import { parse as parseJson } from "json2csv";
-import { extractFromDocument } from "./crawlers/extractors";
+import { extractFromDocument } from "./extractors";
 import { getDataset } from "./client";
+import { BILLA_PRODUCTS } from "./products";
 
 export const fetchDataset = async (datasetId, format) => {
   const data = await getDataset(datasetId);
@@ -25,6 +26,8 @@ export const getReferencesName = (format) =>
 export const marketUrlBuilderMap = {
   TESCO: (productId) =>
     `https://nakup.itesco.cz/groceries/cs-CZ/products/${productId}`,
+  BILLA: (productId) =>
+    `https://shop.billa.cz/produkt/${BILLA_PRODUCTS[productId]}`,
 };
 
 const buildUrl = (marketName, productId) =>
