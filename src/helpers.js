@@ -35,6 +35,7 @@ const buildUrl = (marketName, productId) =>
 
 export const getProductData = async (marketName, productId) => {
   const url = buildUrl(marketName, productId);
+  console.log("Fetching", url);
   const { data } = await axios.get(url);
   const document = parseHtml(data);
 

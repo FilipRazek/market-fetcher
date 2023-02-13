@@ -1,0 +1,1 @@
+node -r dotenv/config src/hooks/update-database.js

@@ -5,8 +5,13 @@ import { fetchDataset, getProductData } from "../helpers.js";
 const APIFY_TOKEN = process.env.APIFY_TOKEN;
 const REFERENCES_DATASET_ID = process.env.REFERENCES_DATASET_ID;
 
-export const updateReferences = async (req, res) => {
-  const currentReferences = await fetchDataset(APIFY_TOKEN, REFERENCES_DATASET_ID, "json");
+const updateReferences = async () => {
+  console.log("Updating references");
+  const currentReferences = await fetchDataset(
+    APIFY_TOKEN,
+    REFERENCES_DATASET_ID,
+    "json"
+  );
   const currentProducts = {};
   for (const { marketName, productId } of currentReferences) {
     if (!currentProducts[marketName]) {
@@ -34,13 +39,11 @@ export const updateReferences = async (req, res) => {
           unit,
         });
       } catch (error) {
-        // eslint-disable-next-line no-console
         console.log(error.message, marketName, productId);
       }
     }
   }
-
   await uploadDataset(APIFY_TOKEN, REFERENCES_DATASET_ID, results);
-
-  res.status(200).send("Success!");
 };
+
+await updateReferences();
