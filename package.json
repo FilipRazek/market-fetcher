@@ -3,12 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "netlify-lambda serve src/functions",
-    "build": "netlify-lambda build src/functions",
-    "lint": "eslint src",
-    "dev": "npm run build && npm start"
+    "start": "node -r dotenv/config src/index.js",
+    "lint": "eslint src"
   },
   "keywords": [],
   "author": "",
@@ -20,8 +18,7 @@
     "jquery": "^3.6.3",
     "json2csv": "^6.0.0-alpha.2",
     "netlify-lambda": "^2.0.15",
-    "node-html-parser": "^6.1.4",
-    "serverless-http": "^3.1.1"
+    "node-html-parser": "^6.1.4"
   },
   "devDependencies": {
     "dotenv": "^16.0.3",

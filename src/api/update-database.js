@@ -1,8 +1,11 @@
-import { PRODUCTS_DATASET_ID, uploadDataset } from "../client";
-import { PRODUCTS } from "../products";
-import { getProductData } from "../helpers";
+import { uploadDataset } from "../apify-client.js";
+import { PRODUCTS } from "../products-data.js";
+import { getProductData } from "../helpers.js";
 
-export const handler = async () => {
+const PRODUCTS_DATASET_ID = process.env.PRODUCTS_DATASET_ID;
+const APIFY_TOKEN = process.env.APIFY_TOKEN;
+
+export const updateDatabase = async (req, res) => {
   const results = [];
   for (const marketName of Object.keys(PRODUCTS)) {
     for (const productId of PRODUCTS[marketName]) {
@@ -21,10 +24,7 @@ export const handler = async () => {
     }
   }
 
-  await uploadDataset(PRODUCTS_DATASET_ID, results);
+  await uploadDataset(APIFY_TOKEN, PRODUCTS_DATASET_ID, results);
 
-  return {
-    statusCode: 200,
-    body: "Success!",
-  };
+  res.status(200).send("Success!");
 };

@@ -1,12 +1,12 @@
 import axios from "axios";
 import { parse as parseHtml } from "node-html-parser";
 import { parse as parseJson } from "json2csv";
-import { extractFromDocument } from "./extractors";
-import { getDataset } from "./client";
-import { BILLA_PRODUCTS } from "./products";
+import { extractFromDocument } from "./market-extractors.js";
+import { getDataset } from "./apify-client.js";
+import { BILLA_PRODUCTS } from "./products-data.js";
 
-export const fetchDataset = async (datasetId, format) => {
-  const data = await getDataset(datasetId);
+export const fetchDataset = async (apifyToken, datasetId, format) => {
+  const data = await getDataset(apifyToken, datasetId);
   switch (format) {
     case "csv":
       return parseJson(data);

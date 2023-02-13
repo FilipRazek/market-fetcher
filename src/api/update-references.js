@@ -1,9 +1,12 @@
-import { REFERENCES_DATASET_ID, uploadDataset } from "../client";
-import { PRODUCTS } from "../products";
-import { fetchDataset, getProductData } from "../helpers";
+import { uploadDataset } from "../apify-client.js";
+import { PRODUCTS } from "../products-data.js";
+import { fetchDataset, getProductData } from "../helpers.js";
 
-export const handler = async () => {
-  const currentReferences = await fetchDataset(REFERENCES_DATASET_ID, "json");
+const APIFY_TOKEN = process.env.APIFY_TOKEN;
+const REFERENCES_DATASET_ID = process.env.REFERENCES_DATASET_ID;
+
+export const updateReferences = async (req, res) => {
+  const currentReferences = await fetchDataset(APIFY_TOKEN, REFERENCES_DATASET_ID, "json");
   const currentProducts = {};
   for (const { marketName, productId } of currentReferences) {
     if (!currentProducts[marketName]) {
@@ -37,10 +40,7 @@ export const handler = async () => {
     }
   }
 
-  await uploadDataset(REFERENCES_DATASET_ID, results);
+  await uploadDataset(APIFY_TOKEN, REFERENCES_DATASET_ID, results);
 
-  return {
-    statusCode: 200,
-    body: "Success!",
-  };
+  res.status(200).send("Success!");
 };
