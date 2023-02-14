@@ -1,6 +1,6 @@
-import { uploadDataset } from "../apify-client.js";
-import { PRODUCTS } from "../products-data.js";
-import { fetchDataset, getProductData } from "../helpers.js";
+import { uploadDataset } from "../apify-client";
+import { PRODUCTS } from "./products-data";
+import { fetchDataset, getProductData } from "../helpers";
 
 const APIFY_TOKEN = process.env.APIFY_TOKEN;
 const REFERENCES_DATASET_ID = process.env.REFERENCES_DATASET_ID;

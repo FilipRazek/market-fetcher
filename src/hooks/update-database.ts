@@ -1,6 +1,6 @@
-import { uploadDataset } from "../apify-client.js";
-import { PRODUCTS } from "../products-data.js";
-import { getProductData } from "../helpers.js";
+import { uploadDataset } from "../apify-client";
+import { Market, PRODUCTS } from "./products-data";
+import { getProductData } from "../helpers";
 
 const PRODUCTS_DATASET_ID = process.env.PRODUCTS_DATASET_ID;
 const APIFY_TOKEN = process.env.APIFY_TOKEN;
@@ -8,7 +8,7 @@ const APIFY_TOKEN = process.env.APIFY_TOKEN;
 export const updateDatabase = async () => {
   console.log("Updating database");
   const results = [];
-  for (const marketName of Object.keys(PRODUCTS)) {
+  for (const marketName of Object.keys(PRODUCTS) as Market[]) {
     for (const productId of PRODUCTS[marketName]) {
       try {
         const { pricePerUnit, loyaltyPricePerUnit } = await getProductData(

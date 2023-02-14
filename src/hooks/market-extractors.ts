@@ -1,4 +1,22 @@
-export const extractFromDocument = (document, extractorName) => {
+import { parse } from "node-html-parser";
+import { Market } from "./products-data";
+
+type Document = ReturnType<typeof parse>;
+
+type Extractor = {
+  titleFn: (document: Document) => string;
+  pricePerUnitFn: (document: Document) => number;
+  priceFn: (document: Document) => number;
+  loyaltyPricePerUnitFn: (document: Document) => number;
+  unitFn: (document: Document) => string;
+  imageFn: (document: Document) => string;
+  categoryFn: (document: Document) => string;
+};
+
+export const extractFromDocument = (
+  document: Document,
+  extractorName: Market
+) => {
   const extractorMap = { TESCO: tescoExtractor, BILLA: billaExtractor };
 
   const extractor = extractorMap[extractorName];
@@ -29,7 +47,7 @@ export const extractFromDocument = (document, extractorName) => {
   };
 };
 
-const tescoExtractor = {
+const tescoExtractor: Extractor = {
   titleFn: (document) =>
     document
       .querySelector('h1[class*="product-details-tile__title"]')
@@ -37,8 +55,7 @@ const tescoExtractor = {
   pricePerUnitFn: (document) =>
     parseFloat(
       document
-        .querySelector("div[class*=price-per-quantity]")
-        .childNodes[0].querySelector(".value")
+        .querySelector("div[class*=price-per-quantity] span.value")
         .textContent.trim()
         .replace(",", ".")
     ),
@@ -73,7 +90,7 @@ const tescoExtractor = {
       .join("/"),
 };
 
-const billaExtractor = {
+const billaExtractor: Extractor = {
   titleFn: (document) =>
     document.querySelector('h1[data-test*="product-title"]').textContent.trim(),
   pricePerUnitFn: (document) =>
@@ -105,6 +122,6 @@ const billaExtractor = {
       document.querySelector("script[data-hid*=schema-breadcrumbs]").textContent
     )
       .itemListElement.slice(0, -1)
-      .map((item) => item.name)
+      .map((item: { name: string }) => item.name)
       .join("/"),
 };

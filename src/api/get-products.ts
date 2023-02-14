@@ -1,9 +1,10 @@
-import { fetchDataset, getReportName } from "../helpers.js";
+import { Request, Response } from "express";
+import { fetchDataset, getReportName } from "../helpers";
 
 const APIFY_TOKEN = process.env.APIFY_TOKEN;
 const PRODUCTS_DATASET_ID = process.env.PRODUCTS_DATASET_ID;
 
-export const getProducts = async (req, res) => {
+export const getProducts = async (req: Request, res: Response) => {
   const { format } = req.query;
   if (!format || typeof format !== "string") {
     return res.status(400).send(JSON.stringify({ error: "Invalid format" }));

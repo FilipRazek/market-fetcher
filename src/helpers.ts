@@ -1,11 +1,15 @@
 import axios from "axios";
 import { parse as parseHtml } from "node-html-parser";
 import { parse as parseJson } from "json2csv";
-import { extractFromDocument } from "./market-extractors.js";
-import { getDataset } from "./apify-client.js";
-import { BILLA_PRODUCTS } from "./products-data.js";
+import { extractFromDocument } from "./hooks/market-extractors";
+import { getDataset } from "./apify-client";
+import { BILLA_PRODUCTS, Market } from "./hooks/products-data";
 
-export const fetchDataset = async (apifyToken, datasetId, format) => {
+export const fetchDataset = async (
+  apifyToken: string,
+  datasetId: string,
+  format: string
+) => {
   const data = await getDataset(apifyToken, datasetId);
   switch (format) {
     case "csv":
@@ -17,23 +21,23 @@ export const fetchDataset = async (apifyToken, datasetId, format) => {
   }
 };
 
-export const getReportName = (format) =>
+export const getReportName = (format: string) =>
   `report-products-${new Date().toISOString()}.${format}`;
 
-export const getReferencesName = (format) =>
+export const getReferencesName = (format: string) =>
   `report-references-${new Date().toISOString()}.${format}`;
 
 export const marketUrlBuilderMap = {
-  TESCO: (productId) =>
+  TESCO: (productId: number) =>
     `https://nakup.itesco.cz/groceries/cs-CZ/products/${productId}`,
-  BILLA: (productId) =>
+  BILLA: (productId: number) =>
     `https://shop.billa.cz/produkt/${BILLA_PRODUCTS[productId]}`,
 };
 
-const buildUrl = (marketName, productId) =>
+const buildUrl = (marketName: Market, productId: number) =>
   marketUrlBuilderMap[marketName](productId);
 
-export const getProductData = async (marketName, productId) => {
+export const getProductData = async (marketName: Market, productId: number) => {
   const url = buildUrl(marketName, productId);
   console.log("Fetching", url);
   const { data } = await axios.get(url);
