@@ -2,15 +2,31 @@ export const extractFromDocument = (document, extractorName) => {
   const extractorMap = { TESCO: tescoExtractor, BILLA: billaExtractor };
 
   const extractor = extractorMap[extractorName];
-  const { titleFn, pricePerUnitFn, unitFn, imageFn, priceFn, categoryFn } =
-    extractor;
+  const {
+    titleFn,
+    pricePerUnitFn,
+    unitFn,
+    imageFn,
+    priceFn,
+    categoryFn,
+    loyaltyPricePerUnitFn,
+  } = extractor;
   const title = titleFn(document);
   const price = priceFn(document);
   const pricePerUnit = pricePerUnitFn(document);
   const unit = unitFn(document);
   const image = imageFn(document);
   const category = categoryFn(document);
-  return { title, pricePerUnit, price, unit, image, category };
+  const loyaltyPricePerUnit = loyaltyPricePerUnitFn(document);
+  return {
+    title,
+    pricePerUnit,
+    price,
+    unit,
+    image,
+    category,
+    loyaltyPricePerUnit,
+  };
 };
 
 const tescoExtractor = {
@@ -33,6 +49,13 @@ const tescoExtractor = {
         .querySelector(".value")
         .textContent.trim()
         .replace(",", ".")
+    ),
+  loyaltyPricePerUnitFn: (document) =>
+    parseFloat(
+      document
+        .querySelector("span.offer-text")
+        .textContent.trim()
+        .match(/S Clubcard (\d+(\.\d+))? Kč/)[1]
     ),
   unitFn: (document) =>
     document
@@ -69,6 +92,7 @@ const billaExtractor = {
         .textContent.match(/\d+,\d{2}/)[0]
         .replace(",", ".")
     ),
+  loyaltyPricePerUnitFn: () => undefined,
   unitFn: (document) =>
     document
       .querySelector("div[data-test*=product-price-type]")
