@@ -73,7 +73,7 @@ const billaExtractor = {
     document
       .querySelector("div[data-test*=product-price-type]")
       .querySelector(".caption")
-      .textContent.match(/1 (kg|l)/)[1],
+      .textContent.match(/1 (kg|l|ks)/)[1],
   imageFn: (document) =>
     document.querySelector('img[class*="product-image"]').getAttribute("src"),
   categoryFn: (document) =>
