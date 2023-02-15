@@ -1,5 +1,7 @@
+import axios from "axios";
 import { parse } from "node-html-parser";
-import { Market } from "./products-data";
+import { buildUrl } from "../helpers.js";
+import { Market } from "./products-data.js";
 
 type Document = ReturnType<typeof parse>;
 
@@ -118,10 +120,22 @@ const billaExtractor: Extractor = {
   imageFn: (document) =>
     document.querySelector('img[class*="product-image"]').getAttribute("src"),
   categoryFn: (document) =>
-    JSON.parse(
-      document.querySelector("script[data-hid*=schema-breadcrumbs]").textContent
-    )
-      .itemListElement.slice(0, -1)
-      .map((item: { name: string }) => item.name)
+    (
+      JSON.parse(
+        document.querySelector("script[data-hid*=schema-breadcrumbs]")
+          .textContent
+      ) as { itemListElement: { name: string }[] }
+    ).itemListElement
+      .slice(0, -1)
+      .map((item) => item.name)
       .join("/"),
+};
+
+export const getProductData = async (marketName: Market, productId: number) => {
+  const url = buildUrl(marketName, productId);
+  console.log("Fetching", url);
+  const { data } = await axios.get<unknown, { data: string }>(url);
+  const document = parse(data);
+
+  return extractFromDocument(document, marketName);
 };

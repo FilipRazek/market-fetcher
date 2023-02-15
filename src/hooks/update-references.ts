@@ -1,6 +1,7 @@
-import { uploadDataset } from "../apify-client";
-import { PRODUCTS } from "./products-data";
-import { fetchDataset, getProductData } from "../helpers";
+import { uploadDataset } from "../apify-client.js";
+import { fetchDataset } from "../helpers.js";
+import { getProductData } from "./market-extractors.js";
+import { Market, PRODUCTS } from "./products-data.js";
 
 const APIFY_TOKEN = process.env.APIFY_TOKEN;
 const REFERENCES_DATASET_ID = process.env.REFERENCES_DATASET_ID;
@@ -12,8 +13,11 @@ const updateReferences = async () => {
     REFERENCES_DATASET_ID,
     "json"
   );
-  const currentProducts = {};
-  for (const { marketName, productId } of currentReferences) {
+  const currentProducts: Record<string, number[]> = {};
+  for (const { marketName, productId } of currentReferences as {
+    marketName: Market;
+    productId: number;
+  }[]) {
     if (!currentProducts[marketName]) {
       currentProducts[marketName] = [];
     }
@@ -21,7 +25,7 @@ const updateReferences = async () => {
   }
 
   const results = [];
-  for (const marketName of Object.keys(PRODUCTS)) {
+  for (const marketName of Object.keys(PRODUCTS) as Market[]) {
     for (const productId of PRODUCTS[marketName]) {
       if (currentProducts[marketName]?.includes(productId)) continue;
       try {
@@ -39,7 +43,11 @@ const updateReferences = async () => {
           unit,
         });
       } catch (error) {
-        console.log(error.message, marketName, productId);
+        console.log(
+          (error as { message: string }).message,
+          marketName,
+          productId
+        );
       }
     }
   }
