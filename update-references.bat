@@ -1,1 +1,1 @@
-node -r dotenv/config src/hooks/update-references.js
+ts-node -r dotenv/config src/hooks/update-references.ts

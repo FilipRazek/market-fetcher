@@ -1,1 +1,1 @@
-node -r dotenv/config src/hooks/update-database.js
+ts-node -r dotenv/config src/hooks/update-database.ts
