@@ -16,6 +16,6 @@ export const uploadDataset = (
 export const getDataset = async (token: string, datasetId: string) => {
   const url = new URL(buildDatasetUrl(datasetId));
   url.searchParams.set("token", token);
-  const { data } = await axios.get(url.href);
+  const { data } = await axios.get<unknown, { data: object[] }>(url.href);
   return data;
 };

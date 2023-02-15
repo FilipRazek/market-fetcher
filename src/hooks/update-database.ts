@@ -1,6 +1,6 @@
-import { uploadDataset } from "../apify-client";
-import { Market, PRODUCTS } from "./products-data";
-import { getProductData } from "../helpers";
+import { uploadDataset } from "../apify-client.js";
+import { getProductData } from "./market-extractors.js";
+import { Market, PRODUCTS } from "./products-data.js";
 
 const PRODUCTS_DATASET_ID = process.env.PRODUCTS_DATASET_ID;
 const APIFY_TOKEN = process.env.APIFY_TOKEN;
@@ -23,7 +23,8 @@ export const updateDatabase = async () => {
           loyaltyPricePerUnit,
         });
       } catch (error) {
-        console.log(error.message, marketName, productId);
+        const { message } = error as { message: string };
+        console.log(message, marketName, productId);
       }
     }
   }
