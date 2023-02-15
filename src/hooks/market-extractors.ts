@@ -9,7 +9,7 @@ type Extractor = {
   titleFn: (document: Document) => string;
   pricePerUnitFn: (document: Document) => number;
   priceFn: (document: Document) => number;
-  loyaltyPricePerUnitFn: (document: Document) => number;
+  loyaltyPricePerUnitFn: (document: Document) => number | undefined;
   unitFn: (document: Document) => string;
   imageFn: (document: Document) => string;
   categoryFn: (document: Document) => string;
@@ -69,13 +69,16 @@ const tescoExtractor: Extractor = {
         .textContent.trim()
         .replace(",", ".")
     ),
-  loyaltyPricePerUnitFn: (document) =>
-    parseFloat(
-      document
-        .querySelector("span.offer-text")
-        .textContent.trim()
-        .match(/S Clubcard (\d+(\.\d+))? Kč/)[1]
-    ),
+  loyaltyPricePerUnitFn: (document) => {
+    const offerTextSpan = document.querySelector("span.offer-text");
+    return offerTextSpan
+      ? parseFloat(
+          offerTextSpan.textContent
+            .trim()
+            .match(/S Clubcard (\d+(\.\d+))? Kč/)[1]
+        )
+      : undefined;
+  },
   unitFn: (document) =>
     document
       .querySelector("div[class*=price-per-quantity]")
