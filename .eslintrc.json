@@ -18,5 +18,6 @@
     "quotes": ["error", "double", { "avoidEscape": true }],
     "comma-dangle": ["error", "only-multiline"],
     "@typescript-eslint/no-misused-promises": "off"
-  }
+  },
+  "ignorePatterns": ["src/__tests__/assets/*.ts"]
 }

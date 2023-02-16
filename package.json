@@ -4,8 +4,9 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "start": "ts-node -r dotenv/config src/index.ts",
-    "lint": "eslint src"
+    "start": "ts-node -r dotenv/config src/api/index.ts",
+    "lint": "eslint src",
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
@@ -20,9 +21,12 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.17",
+    "@types/jest": "^29.4.0",
     "@types/json2csv": "^5.0.3",
     "@typescript-eslint/eslint-plugin": "^5.52.0",
     "dotenv": "^16.0.3",
-    "eslint": "^8.33.0"
+    "eslint": "^8.33.0",
+    "jest": "^29.4.3",
+    "ts-jest": "^29.0.5"
   }
 }
