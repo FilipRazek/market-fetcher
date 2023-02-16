@@ -5,7 +5,7 @@ import { Market, PRODUCTS } from "./products-data.js";
 const PRODUCTS_DATASET_ID = process.env.PRODUCTS_DATASET_ID;
 const APIFY_TOKEN = process.env.APIFY_TOKEN;
 
-export const updateDatabase = async () => {
+export const fetchProducts = async () => {
   console.log("Updating database");
   const results = [];
   for (const marketName of Object.keys(PRODUCTS) as Market[]) {
@@ -28,7 +28,8 @@ export const updateDatabase = async () => {
       }
     }
   }
-  await uploadDataset(APIFY_TOKEN, PRODUCTS_DATASET_ID, results);
+  return results;
 };
 
-await updateDatabase();
+const results = await fetchProducts();
+await uploadDataset(APIFY_TOKEN, PRODUCTS_DATASET_ID, results);

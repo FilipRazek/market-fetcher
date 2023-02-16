@@ -1,6 +1,6 @@
 import express from "express";
-import { getProducts } from "./api/get-products.js";
-import { getReferences } from "./api/get-references.js";
+import { getProducts } from "./get-products.js";
+import { getReferences } from "./get-references.js";
 
 // Access the PORT environment variable set by hosting site, or use 8080 locally
 const PORT = process.env.PORT || 8080;

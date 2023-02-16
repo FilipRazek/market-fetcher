@@ -1,18 +1,16 @@
-import { uploadDataset } from "../apify-client.js";
-import { fetchDataset } from "../helpers.js";
+import { getDataset, uploadDataset } from "../apify-client.js";
 import { getProductData } from "./market-extractors.js";
 import { Market, PRODUCTS } from "./products-data.js";
 
 const APIFY_TOKEN = process.env.APIFY_TOKEN;
 const REFERENCES_DATASET_ID = process.env.REFERENCES_DATASET_ID;
 
-const updateReferences = async () => {
+const fetchReferences = async (
+  apifyToken: string,
+  referencesDatasetId: string
+) => {
   console.log("Updating references");
-  const currentReferences = await fetchDataset(
-    APIFY_TOKEN,
-    REFERENCES_DATASET_ID,
-    "json"
-  );
+  const currentReferences = await getDataset(apifyToken, referencesDatasetId);
   const currentProducts: Record<string, number[]> = {};
   for (const { marketName, productId } of currentReferences as {
     marketName: Market;
@@ -51,7 +49,8 @@ const updateReferences = async () => {
       }
     }
   }
-  await uploadDataset(APIFY_TOKEN, REFERENCES_DATASET_ID, results);
+  return results;
 };
 
-await updateReferences();
+const results = await fetchReferences(APIFY_TOKEN, REFERENCES_DATASET_ID);
+await uploadDataset(APIFY_TOKEN, REFERENCES_DATASET_ID, results);
