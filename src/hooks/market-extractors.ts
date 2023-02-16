@@ -49,7 +49,7 @@ export const extractFromDocument = (
   };
 };
 
-const tescoExtractor: Extractor = {
+export const tescoExtractor: Extractor = {
   titleFn: (document) =>
     document
       .querySelector('h1[class*="product-details-tile__title"]')
@@ -95,7 +95,7 @@ const tescoExtractor: Extractor = {
       .join("/"),
 };
 
-const billaExtractor: Extractor = {
+export const billaExtractor: Extractor = {
   titleFn: (document) =>
     document.querySelector('h1[data-test*="product-title"]').textContent.trim(),
   pricePerUnitFn: (document) =>
