@@ -11,7 +11,7 @@ export const fetchProducts = async () => {
   for (const marketName of Object.keys(PRODUCTS) as Market[]) {
     for (const productId of PRODUCTS[marketName]) {
       try {
-        const { pricePerUnit, loyaltyPricePerUnit } = await getProductData(
+        const { price, loyaltyPrice } = await getProductData(
           marketName,
           productId
         );
@@ -19,8 +19,8 @@ export const fetchProducts = async () => {
           marketName,
           productId,
           date: new Date().toISOString(),
-          pricePerUnit,
-          loyaltyPricePerUnit,
+          price,
+          loyaltyPrice,
         });
       } catch (error) {
         const { message } = error as { message: string };
