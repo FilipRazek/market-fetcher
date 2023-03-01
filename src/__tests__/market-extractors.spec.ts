@@ -12,10 +12,6 @@ describe("Market Extractors", () => {
         "Lindt Excellence Hořká čokoláda s pomerančovými kousky a s kousky mandlí 100g"
       );
     });
-    it("should extract price", () => {
-      const price = tescoExtractor.priceFn(document);
-      expect(price).toBe(79.9);
-    });
     it("should extract image", () => {
       const image = tescoExtractor.imageFn(document);
       expect(image).toBe(
@@ -32,13 +28,17 @@ describe("Market Extractors", () => {
       const unit = tescoExtractor.unitFn(document);
       expect(unit).toBe("kg");
     });
+    it("should extract price", () => {
+      const price = tescoExtractor.priceFn(document);
+      expect(price).toBe(79.9);
+    });
     it("should extract unit price", () => {
       const unitPrice = tescoExtractor.pricePerUnitFn(document);
       expect(unitPrice).toBe(799);
     });
     it("should extract unit loyalty price", () => {
       const loyaltyPricePerUnit =
-        tescoExtractor.loyaltyPricePerUnitFn(document);
+        tescoExtractor.loyaltyPriceFn(document);
       expect(loyaltyPricePerUnit).toBe(52.9);
     });
   });
